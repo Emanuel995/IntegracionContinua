@@ -17,26 +17,39 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </h:head>
     <h:body>
-        <h:form>
+        <h:form id="formulario">
             <p:growl autoUpdate="true" id="toast" />
-        <h2 class="text-info">Problema Cripto-Aritmetico</h2>
-        <p:panelGrid columns="2">
-            <h:outputText value="Primer Sumando" />
-            <b:inputText value="#{enjambre.operador1}" placeholder="Operador 1">
-            </b:inputText>
-            <h:outputText value="Segundo Sumando" />
-            <b:inputText value="#{enjambre.operador2}" placeholder="Operador 2">
-            </b:inputText>
-            <h:outputText value="Total" />
-            <b:inputText value="#{enjambre.resultado}" placeholder="Total">
-            </b:inputText>
+            <h2 class="text-info">Problema Cripto-Aritmetico</h2>              
+            <p:panelGrid columns="2">
+                <h:outputLabel for="basic2" value="Numero de Iteraciones" />
+                <p:spinner id="basic2" value="#{enjambre.iteraciones}" />        
+                <h:outputLabel for="basic" value="Numero de Poblacion " />
+                <p:spinner id="basic" value="#{enjambre.pobl}" />
+                <h:outputText value="Primer Sumando" />
+                <p:inputText value="#{enjambre.operador1}" placeholder="Operador 1">
+                </p:inputText>
+                <h:outputText value="Segundo Sumando" />
+                <p:inputText value="#{enjambre.operador2}" placeholder="Operador 2">
+                </p:inputText>
+                <h:outputText value="Total" />
+                <p:inputText value="#{enjambre.resultado}" placeholder="Total">
+                </p:inputText>
+            </p:panelGrid>
             <div class="ui-grid ui-grid-responsive" style="margin-top:10px;">
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-12">
-                       <p:commandButton value="Calcular" partialSubmit="true" actionListener="#{enjambre.procesar()}" />  
+                        <p:commandButton value="Calcular" partialSubmit="true" actionListener="#{enjambre.procesar()}" update=":formulario:tabla" >
+                           <!--p:ajax event="dialogReturn" process="@parent" update=":formulario:tabla"/-->
+                       </p:commandButton>                    
                     </div>
                 </div>
             </div>
-        </p:panelGrid>
-        </h:form>
+            <br />
+            <p:dataTable  id="tabla" style="width: 75%;"  widgetVar="tabla" rows="10" paginator="true" liveResize="true" resizableColumns="true" value="#{enjambre.solucion2}" var="unaLuciernaga" emptyMessage="No se ha encontrado una solucion" paginatorPosition="bottom">
+                <p:column headerText="N° de Luciernaga" width="140">#{unaLuciernaga.id}</p:column>                    
+                <p:column headerText="N° de Iteracion" width="140">#{unaLuciernaga.iteracion}</p:column>                    
+                <p:column headerText="Solución" width="140">#{unaLuciernaga.toString()}</p:column>
+            </p:dataTable>
+        </h:form>        
     </h:body>
+</html>

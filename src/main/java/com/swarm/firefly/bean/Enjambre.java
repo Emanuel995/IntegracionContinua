@@ -12,28 +12,63 @@ import java.util.*;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
-import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ViewScoped;
+import org.primefaces.event.SelectEvent;
 
 /**
  *
  * @author Luciano
  */
 @ManagedBean(name="enjambre")
-@RequestScoped
+@ViewScoped
 public class Enjambre implements Serializable{
     		
-        //Entrada del problema		
+        //Entrada del problema
+        private int iteraciones;
+        private int pobl;
         private	String operador1;
 	private String operador2;
 	private String  resultado;
+        private ArrayList<String> solucion;
+        private ArrayList<Luciernaga> solucion2;
+        
+    public ArrayList<Luciernaga> getSolucion2() {
+        return solucion2;
+    }
 
+    public void setSolucion2(ArrayList<Luciernaga> solucion) {
+        this.solucion2 = solucion;
+    }
+
+    public ArrayList<String> getSolucion() {
+        return solucion;
+    }
+
+    public void setSolucion(ArrayList<String> solucion) {
+        this.solucion = solucion;
+    }
+        
     public String getOperador1() {
         return operador1;
     }
     public void setOperador1(String operador1) {
         this.operador1 = operador1;
+    }
+
+    public int getIteraciones() {
+        return iteraciones;
+    }
+
+    public void setIteraciones(int iteraciones) {
+        this.iteraciones = iteraciones;
+    }
+
+    public int getPobl() {
+        return pobl;
+    }
+
+    public void setPobl(int pobl) {
+        this.pobl = pobl;
     }
     public String getOperador2() {
         return operador2;
@@ -50,6 +85,10 @@ public class Enjambre implements Serializable{
 
 @PostConstruct
     public void init(){
+        this.pobl = 50;
+        this.iteraciones =1;
+        this.solucion = new ArrayList<String>();
+        this.solucion2 = new ArrayList<Luciernaga>();
     }
     
     public void procesar(){    
@@ -64,47 +103,57 @@ public class Enjambre implements Serializable{
 				
         //Cantidad de letras distintas que contiene el problema criptoaritmetico
         HashMap<Character, Integer> letras = getLetras(operador1, operador2, resultado);
-
-        //Muestra todos los caracteres distintos ingresados
-        //verLetras(letras);
 		    		
         //Creación de la poblacion de luciernagas		
-	Luciernaga[] swarm = poblacion(50,letras);
+	Luciernaga[] swarm = poblacion(this.pobl,letras);
 		
         //Comparar luciernagas teniendo en cuenta el brillo y el atractivo de cada una
 	int iteraciones = 0;
-	while(iteraciones <4){
+	while(iteraciones < this.iteraciones){
             iteraciones++;
             for (int i=0; i < swarm.length; i++){
 		for (int j=0; j < swarm.length; j++){
-                    if ((i!=j)&&(swarm[i].intensidad(sumando1, sumando2, total)!=0)){
-			//System.out.println("Iteracion: " + iteraciones);
-			swarm[i].setIteracion(iteraciones);
-			if (swarm[i].atractivo(swarm[j], sumando1, sumando2, total)){
-                            //movimiento aleatorio
-                            swarm[i].alfaStep();
-			}else{
-                            //acercar luciernaga i a j
-                            swarm[i].desplazamiento(swarm[j]);
-                            if(swarm[i].intensidad(sumando1, sumando2, total)!=0){
-				swarm[i].alfaStep();
-                            }
-			}
-                    }
-		}
-            }
-	}
 
-        //Mostrar el valor de todas las luciernagas al finalizar todo
-        /*		
-            for(int z = 0 ; z < swarm.length ; z++){
-        	System.out.println(swarm[z].id);
-		System.out.println(swarm[z].intensidad(sumando1, sumando2, total));
-		verLetras(swarm[z].elementos);
+                    if (i != j ){
+						
+			if((swarm[i].intensidad(sumando1, sumando2, total) != 0) && (swarm[j].intensidad(sumando1, sumando2, total) != 0)){
+							
+                            if (swarm[i].atractivo(swarm[j], sumando1, sumando2, total) == 0) {
+
+				swarm[j].desplazamiento(swarm[i]);
+				swarm[j].alfaStep(iteraciones, sumando1, sumando2, total);							
+								
+                            } else if (swarm[i].atractivo(swarm[j], sumando1, sumando2, total) == 1) {
+								
+                                swarm[i].alfaStep(iteraciones, sumando1, sumando2, total);
+								
+                            } else{
+								
+                                swarm[i].desplazamiento(swarm[j]);
+				swarm[i].alfaStep(iteraciones, sumando1, sumando2, total);
+								
+                            }
+			
+                        } else if((swarm[i].intensidad(sumando1, sumando2, total) == 0) && (swarm[j].intensidad(sumando1, sumando2, total) != 0)){
+							
+                            swarm[j].desplazamiento(swarm[i]);
+                            swarm[j].alfaStep(iteraciones, sumando1, sumando2, total);							
+						
+                        } else if((swarm[i].intensidad(sumando1, sumando2, total) != 0) && (swarm[j].intensidad(sumando1, sumando2, total) == 0)){
+						
+                            swarm[i].desplazamiento(swarm[j]);
+                            swarm[i].alfaStep(iteraciones, sumando1, sumando2, total);
+						
+			}
+							
+                    }                    
+                    
+                }
             }
-        */		
+        }
 
         resultados(swarm, sumando1, sumando2, total);
+
     }
 
 //Determinacion del dominio del problema ----> Cantidad de letras distintas que posee el problema criptoaritmetico
@@ -139,9 +188,6 @@ public class Enjambre implements Serializable{
             }
             mapeador.put((char)e.getKey(), valorcito);			
 	}
-//Solo para ver como se fueron asignador las letras a las posiciones
-	    //System.out.println("Esta es una Luciernaga");
-	    //verLetras(mapeador);		
 	return mapeador; 
     }
 	
@@ -186,11 +232,17 @@ public class Enjambre implements Serializable{
 	int cont = 0;
 	for (Luciernaga unaLuciernaga:unEnjambre){
             if ((unaLuciernaga.intensidad(operador1, operador2, resultado) == 0)){
-		cont++;
+                if(!solucion.contains(unaLuciernaga.toString()))
+                solucion.add(unaLuciernaga.toString());
+                solucion2.add(unaLuciernaga);
+                cont++;
 		System.out.println(unaLuciernaga.toString() + " Iteracion: " + unaLuciernaga.getIteracion() + " " + unaLuciernaga.id);
             }
 	}
-	System.out.println("Luciernagas optimas: " + cont);
+	System.out.println("Luciernagas optimas: " + cont + "   " + solucion.size());
     }
 
+    public void returnResult(SelectEvent event){
+    }    
+    
 }
