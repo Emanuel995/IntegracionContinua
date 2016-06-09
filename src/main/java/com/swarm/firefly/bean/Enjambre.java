@@ -31,7 +31,16 @@ public class Enjambre implements Serializable{
 	private String  resultado;
         private ArrayList<String> solucion;
         private ArrayList<Luciernaga> solucion2;
-        
+        private HashMap<String,Integer> luciernagasXSolucion;
+
+    public HashMap<String, Integer> getLuciernagasXSolucion() {
+        return luciernagasXSolucion;
+    }
+
+    public void setLuciernagasXSolucion(HashMap<String, Integer> luciernagasXSolucion) {
+        this.luciernagasXSolucion = luciernagasXSolucion;
+    }    
+
     public ArrayList<Luciernaga> getSolucion2() {
         return solucion2;
     }
@@ -87,12 +96,12 @@ public class Enjambre implements Serializable{
     public void init(){
         this.pobl = 50;
         this.iteraciones =1;
-        this.solucion = new ArrayList<String>();
-        this.solucion2 = new ArrayList<Luciernaga>();
     }
     
-    public void procesar(){    
+    public void procesar(int multiplicador){
         
+        this.solucion = new ArrayList<String>();
+        this.solucion2 = new ArrayList<Luciernaga>();
         char[] sumando1 = this.operador1.toCharArray();
 	char[] sumando2 = this.operador2.toCharArray();
 	char[] total = this.resultado.toCharArray();
@@ -116,33 +125,33 @@ public class Enjambre implements Serializable{
 
                     if (i != j ){
 						
-			if((swarm[i].intensidad(sumando1, sumando2, total) != 0) && (swarm[j].intensidad(sumando1, sumando2, total) != 0)){
+			if((swarm[i].intensidad(multiplicador,sumando1, sumando2, total) != 0) && (swarm[j].intensidad(multiplicador,sumando1, sumando2, total) != 0)){
 							
-                            if (swarm[i].atractivo(swarm[j], sumando1, sumando2, total) == 0) {
+                            if (swarm[i].atractivo(multiplicador,swarm[j], sumando1, sumando2, total) == 0) {
 
-				swarm[j].desplazamiento(swarm[i]);
-				swarm[j].alfaStep(iteraciones, sumando1, sumando2, total);							
+				swarm[j].betaStep(swarm[i]);
+				swarm[j].alfaStep(multiplicador,iteraciones, sumando1, sumando2, total);							
 								
-                            } else if (swarm[i].atractivo(swarm[j], sumando1, sumando2, total) == 1) {
+                            } else if (swarm[i].atractivo(multiplicador,swarm[j], sumando1, sumando2, total) == 1) {
 								
-                                swarm[i].alfaStep(iteraciones, sumando1, sumando2, total);
+                                swarm[i].alfaStep(multiplicador,iteraciones, sumando1, sumando2, total);
 								
                             } else{
 								
-                                swarm[i].desplazamiento(swarm[j]);
-				swarm[i].alfaStep(iteraciones, sumando1, sumando2, total);
+                                swarm[i].betaStep(swarm[j]);
+				swarm[i].alfaStep(multiplicador,iteraciones, sumando1, sumando2, total);
 								
                             }
 			
-                        } else if((swarm[i].intensidad(sumando1, sumando2, total) == 0) && (swarm[j].intensidad(sumando1, sumando2, total) != 0)){
+                        } else if((swarm[i].intensidad(multiplicador,sumando1, sumando2, total) == 0) && (swarm[j].intensidad(multiplicador,sumando1, sumando2, total) != 0)){
 							
-                            swarm[j].desplazamiento(swarm[i]);
-                            swarm[j].alfaStep(iteraciones, sumando1, sumando2, total);							
+                            swarm[j].betaStep(swarm[i]);
+                            swarm[j].alfaStep(multiplicador,iteraciones, sumando1, sumando2, total);							
 						
-                        } else if((swarm[i].intensidad(sumando1, sumando2, total) != 0) && (swarm[j].intensidad(sumando1, sumando2, total) == 0)){
+                        } else if((swarm[i].intensidad(multiplicador,sumando1, sumando2, total) != 0) && (swarm[j].intensidad(multiplicador,sumando1, sumando2, total) == 0)){
 						
-                            swarm[i].desplazamiento(swarm[j]);
-                            swarm[i].alfaStep(iteraciones, sumando1, sumando2, total);
+                            swarm[i].betaStep(swarm[j]);
+                            swarm[i].alfaStep(multiplicador,iteraciones, sumando1, sumando2, total);
 						
 			}
 							
@@ -152,7 +161,7 @@ public class Enjambre implements Serializable{
             }
         }
 
-        resultados(swarm, sumando1, sumando2, total);
+        resultados(multiplicador,swarm, sumando1, sumando2, total);
 
     }
 
@@ -228,10 +237,10 @@ public class Enjambre implements Serializable{
 	}
     }
 	
-    public void resultados(Luciernaga[] unEnjambre, char[] operador1, char[] operador2, char[] resultado){
+    public void resultados(int multiplicador, Luciernaga[] unEnjambre, char[] operador1, char[] operador2, char[] resultado){
 	int cont = 0;
 	for (Luciernaga unaLuciernaga:unEnjambre){
-            if ((unaLuciernaga.intensidad(operador1, operador2, resultado) == 0)){
+            if ((unaLuciernaga.intensidad(multiplicador,operador1, operador2, resultado) == 0)){
                 if(!solucion.contains(unaLuciernaga.toString()))
                 solucion.add(unaLuciernaga.toString());
                 solucion2.add(unaLuciernaga);

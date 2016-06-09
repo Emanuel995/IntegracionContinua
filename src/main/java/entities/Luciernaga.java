@@ -54,7 +54,7 @@ public class Luciernaga implements java.io.Serializable{
 	return elementos;
     }
 	
-    public int intensidad(char[] operador1, char[] operador2, char[] resultado) {
+    public int intensidad(int multiplicador, char[] operador1, char[] operador2, char[] resultado) {
 	int intensidad = 0;
 	int peso1 = 1;
 	int unOperador1= 0;
@@ -76,22 +76,22 @@ public class Luciernaga implements java.io.Serializable{
             unOperador3 = unOperador3 + (elementos.get(unChar) * peso3);
             peso3 = peso3*10;
 	}
-	intensidad = Math.abs(unOperador1 + unOperador2 - unOperador3);
+	intensidad = Math.abs((multiplicador*unOperador1) + unOperador2 - (multiplicador*unOperador3));
 	
         return intensidad;
     }
 
-    public int atractivo(Luciernaga unaLuciernaga, char[] operador1, char[] operador2, char[] resultado) {
-    	if (Math.abs(this.intensidad(operador1, operador2, resultado)) < Math.abs(unaLuciernaga.intensidad(operador1, operador2, resultado))){
+    public int atractivo(int multiplicador, Luciernaga unaLuciernaga, char[] operador1, char[] operador2, char[] resultado) {
+    	if (Math.abs(this.intensidad(multiplicador,operador1, operador2, resultado)) < Math.abs(unaLuciernaga.intensidad(multiplicador,operador1, operador2, resultado))){
             return 0; //I1>I2
-	}else if(Math.abs(this.intensidad(operador1, operador2, resultado)) == Math.abs(unaLuciernaga.intensidad(operador1, operador2, resultado))){
+	}else if(Math.abs(this.intensidad(multiplicador,operador1, operador2, resultado)) == Math.abs(unaLuciernaga.intensidad(multiplicador,operador1, operador2, resultado))){
             return 1;//I1=I2
 	}else{
             return 2;    //I1<I2             
         }  
     }
 
-    public void desplazamiento(Luciernaga unaLuciernaga) {
+    public void betaStep(Luciernaga unaLuciernaga) {
 	Random valor = new Random();
 	int unNumero = valor.nextInt(10);
 	while(!this.elementos.containsValue(unNumero)){
@@ -138,7 +138,7 @@ public class Luciernaga implements java.io.Serializable{
     }
 	
 //Alfa-Step
-    public void alfaStep(int iteracion,char[] operador1,char[] operador2,char[] operador3){
+    public void alfaStep(int multiplicador,int iteracion,char[] operador1,char[] operador2,char[] operador3){
         Random valor = new Random();
 	boolean bandera = true;
 	int unValor = 9999;
@@ -160,7 +160,7 @@ public class Luciernaga implements java.io.Serializable{
             }
 	}
 	this.elementos.put(unCar, unValor);
-	if(this.intensidad(operador1, operador2, operador3)==0){
+	if(this.intensidad(multiplicador,operador1, operador2, operador3)==0){
             this.setIteracion(iteracion);
 	}
     }
