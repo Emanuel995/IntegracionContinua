@@ -39,7 +39,7 @@ public class AlfaStep {
     public void tearDown() {
     }
     
-/*    @Test
+    @Test
     public void probar(){
     
         HashMap<Character, Integer> comida = new HashMap<Character, Integer>();
@@ -54,11 +54,12 @@ public class AlfaStep {
 
         Luciernaga prueba = new Luciernaga("Luciernaga 1", comida);
         
-        prueba.alfaStep();
-        assertEquals(" R:6 S:3 D:2 E:7 Y:9 M:0 N:1 O:4 ",prueba.toString());
+        //prueba.alfaStep(1, 1,{'S','E','N','D'},{'M','O','R','E'},{'M','O','N','E','Y'});
+        
+        assertEquals("Luciernaga",prueba.id);
         
 
-    }*/
+    }
     // TODO add test methods here.
     // The methods must be annotated with annotation @Test. For example:
     //
