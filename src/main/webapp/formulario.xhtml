@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"   
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"    
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      >
+    <h:head>
+        <title>Algoritmo FireFly</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <h:form id="formulario">
+            <p:growl autoUpdate="true" id="toast" />
+            <h2 class="text-info">Problema Cripto-Aritmetico</h2>              
+            <p:panelGrid columns="2">
+                <h:outputLabel for="basic2" value="Numero de Iteraciones" />
+                <p:spinner id="basic2" value="#{enjambre.iteraciones}" />        
+                <h:outputLabel for="basic" value="Numero de Poblacion " />
+                <p:spinner id="basic" value="#{enjambre.pobl}" />
+                <h:outputText value="Ingrese el Primer Operador" />
+                <p:inputText value="#{enjambre.operador1}" placeholder="Operador 1" required="true" requiredMessage="Primer operador obligatorio" validatorMessage="Primer Operador: solo debe contener letras y una longitud de 3 a 5 caracteres" >
+                    <f:validateRegex pattern="[a-zA-Z ]{3,5}"/>
+                </p:inputText>
+                <h:outputText value="Ingrese el Segundo Operador" />
+                <p:inputText value="#{enjambre.operador2}" placeholder="Operador 2" required="true" requiredMessage="Segundo operador obligatorio" validatorMessage="Segundo Operador: solo debe contener letras y una longitud de 3 a 5 caracteres" > 
+                    <f:validateRegex pattern="[a-zA-Z ]{3,5}"/>
+                </p:inputText>
+                <h:outputText value="Ingrese el Resultado" />
+                <p:inputText value="#{enjambre.resultado}" placeholder="Total" required="true" requiredMessage="Segundo operador obligatorio" validatorMessage="Resultado: solo debe contener letras y una longitud de 3 a 5 caracteres">
+                    <f:validateRegex pattern="[a-zA-Z ]{3,5}"/>
+                </p:inputText>
+            </p:panelGrid>
+            <div class="ui-grid ui-grid-responsive" style="margin-top:10px;">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-12">
+                        <p:commandButton value="Sumar" partialSubmit="true" actionListener="#{enjambre.procesar(1)}" update=":formulario:tabla, :formulario:tabla2" >
+                           <!--p:ajax event="dialogReturn" process="@parent" update=":formulario:tabla"/-->
+                       </p:commandButton>                    
+                        <p:commandButton value="Restar" partialSubmit="true" actionListener="#{enjambre.procesar(-1)}" update=":formulario:tabla, :formulario:tabla2" >
+                           <!--p:ajax event="dialogReturn" process="@parent" update=":formulario:tabla"/-->
+                       </p:commandButton>                    
+                    </div>
+                </div>
+            </div>
+            <br />
+            <p:dataTable  id="tabla" style="width: 75%;"  widgetVar="tabla" rows="10" paginator="true" liveResize="true" resizableColumns="true" value="#{enjambre.solucion2}" var="unaLuciernaga" emptyMessage="No se ha encontrado una solucion" paginatorPosition="bottom">
+                <p:column headerText="N° de Luciernaga" width="140">#{unaLuciernaga.id}</p:column>                    
+                <p:column headerText="N° de Iteracion" width="140">#{unaLuciernaga.iteracion}</p:column>                    
+                <p:column headerText="Solución" width="140">#{unaLuciernaga.toString()}</p:column>
+            </p:dataTable>
+            <br />
+            <p:dataTable  id="tabla2" style="width: 50%;"  widgetVar="tabla" rows="10" paginator="true" liveResize="true" resizableColumns="true" value="#{enjambre.solucion}" var="unaLuciernaga" emptyMessage="No se ha encontrado una solucion" paginatorPosition="bottom">
+                <p:column headerText="Soluciones Distintas" width="140">#{unaLuciernaga}</p:column>                    
+            </p:dataTable>
+            
+        </h:form>        
+    </h:body>
+</html>
