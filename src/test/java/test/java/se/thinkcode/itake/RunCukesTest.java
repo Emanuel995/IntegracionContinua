@@ -10,6 +10,6 @@ import cucumber.api.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "src/test/java/test/resources/se/thinkcode/itake")
+@CucumberOptions(features = "src/test/java/test/resources/se/thinkcode/itake", format = {"json:target/cucumber.json"})
 public class RunCukesTest {
 }
