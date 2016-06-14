@@ -24,7 +24,7 @@ public class StepDefinitions {
     private int num1;
     private int num2;
 
-        @Given("^Tengo los numeros (\\d+) y (\\d+)$")
+        @Given("^Tengo los numeros ([-]?\\d+) y ([-]?\\d+)$")
         public void tengo_los_numeros_y(int numero1,int numero2) throws Throwable {
             calculadora = new Calculadora();
             num1 = numero1;
@@ -45,7 +45,7 @@ public class StepDefinitions {
         public void multiplicando_los_dos_numeros_en_la_calculadora() throws Throwable {
             resultado = calculadora.multiplicacion(num1,num2);
         }
-/*
+        /*
         @When("^Dividiendo los dos numeros en la calculadora$")
         public void dividiendo_los_dos_numeros_en_la_calculadora() throws Throwable {
             resultado = calculadora.resta(num1,num2);
@@ -53,7 +53,7 @@ public class StepDefinitions {
 */
         
         
-        @Then("^El resultado es (\\d+)$")
+        @Then("^El resultado es ([-]?\\d+)$")
         public void el_resultado_es(int resul) throws Throwable {
             
             assertEquals(resul, resultado);
