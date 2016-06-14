@@ -35,7 +35,7 @@ public class StepDefinitions {
         public void sumando_los_dos_numeros_en_la_calculadora() throws Throwable {
             resultado = calculadora.sumar(num1, num2);
         }
-        
+/*        
         @When("^Restando los dos numeros en la calculadora$")
         public void restando_los_dos_numeros_en_la_calculadora() throws Throwable {
             resultado = calculadora.resta(num1,num2);
