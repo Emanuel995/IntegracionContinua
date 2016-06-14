@@ -10,7 +10,7 @@ and open the template in the editor.
       xmlns:ui="http://java.sun.com/jsf/facelets"    
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:b="http://bootsfaces.net/ui"
+      
       >
     <h:head>
         <title>Algoritmo FireFly</title>
@@ -19,7 +19,8 @@ and open the template in the editor.
     <h:body>
         <h:form id="formulario">
             <p:growl autoUpdate="true" id="toast" />
-            <h2 class="text-info">Problema Cripto-Aritmetico</h2>              
+            <h2 class="text-info">Problema Cripto-Aritmetico</h2>
+            <h3 class="text-info">Soy un texto problemático!</h3>
             <p:panelGrid columns="2">
                 <h:outputLabel for="basic2" value="Numero de Iteraciones" />
                 <p:spinner id="basic2" value="#{enjambre.iteraciones}" />        
